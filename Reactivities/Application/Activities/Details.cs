@@ -1,13 +1,11 @@
-﻿using Application.Activities;
-using Application.Core;
+﻿using Application.Core;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application;
+namespace Application.Activities;
 
 public class Details
 {
