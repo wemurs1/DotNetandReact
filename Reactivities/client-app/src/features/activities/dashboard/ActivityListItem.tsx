@@ -3,12 +3,13 @@ import { Item, Button, Segment, Icon, Label } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 import { format } from "date-fns";
 import ActivityListItemAttendee from "./ActivityListItemAttendee";
+import { observer } from "mobx-react-lite";
 
 interface Props {
   activity: Activity;
 }
 
-export default function ActivityListItem({ activity }: Props) {
+export default observer(function ActivityListItem({ activity }: Props) {
   return (
     <Segment.Group>
       <Segment>
@@ -33,7 +34,10 @@ export default function ActivityListItem({ activity }: Props) {
                 {activity.title}
               </Item.Header>
               <Item.Description>
-                Hosted by <Link to={`/profiles/${activity.hostUsername}`}>{activity.host?.displayName}</Link>
+                Hosted by{" "}
+                <Link to={`/profiles/${activity.hostUsername}`}>
+                  {activity.host?.displayName}
+                </Link>
               </Item.Description>
               {activity.isHost && (
                 <Item.Description>
@@ -74,4 +78,4 @@ export default function ActivityListItem({ activity }: Props) {
       </Segment>
     </Segment.Group>
   );
-}
+});
