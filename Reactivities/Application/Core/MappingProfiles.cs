@@ -2,7 +2,6 @@
 using Application.Comments;
 using AutoMapper;
 using Domain;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Application.Core;
 
@@ -22,7 +21,12 @@ public class MappingProfiles : Profile
             .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.AppUser!.Followers.Count))
             .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.AppUser!.Followings.Count))
             .ForMember(d => d.Following, o => o.MapFrom(s => s.AppUser!.Followers.Any(x => x.Observer!.UserName == currentUsername)));
-
+        CreateMap<ActivityAttendee, Profiles.UserActivityDto>()
+            .ForMember(i => i.Id, o => o.MapFrom(s => s.Activity!.Id))
+            .ForMember(d => d.Title, o => o.MapFrom(s => s.Activity!.Title))
+            .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity!.Category))
+            .ForMember(d => d.Date, o => o.MapFrom(s => s.Activity!.Date))
+            .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.Activity!.Attendees.FirstOrDefault(x => x.IsHost)!.AppUser!.UserName));
         CreateMap<AppUser, Profiles.Profile>()
             .ForMember(d => d.Image, o => o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain)!.Url))
             .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
