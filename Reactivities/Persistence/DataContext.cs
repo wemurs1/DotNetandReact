@@ -28,7 +28,7 @@ public class DataContext : IdentityDbContext<AppUser>
         {
             b.HasKey(k => new { k.ObserverId, k.TargetId });
             b.HasOne(o => o.Observer).WithMany(f => f.Followings).HasForeignKey(o => o.ObserverId).OnDelete(DeleteBehavior.Cascade);
-            b.HasOne(t => t.Target).WithMany(f => f.Followers).HasForeignKey(t => t.TargetId).OnDelete(DeleteBehavior.Cascade);
+            b.HasOne(t => t.Target).WithMany(f => f.Followers).HasForeignKey(t => t.TargetId).OnDelete(DeleteBehavior.NoAction);
         });
     }
 }
