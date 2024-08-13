@@ -43,7 +43,8 @@ app.UseCsp(options => options
     .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
     .FormActions(s => s.Self())
     .FrameAncestors(s => s.Self())
-    .ImageSources(s => s.Self().CustomSources("blob:", "https://res.cloudinary.com", "data:", "https://scontent.fltn4-1.fna.fbcdn.net"))
+    .ImageSources(s => s.Self().CustomSources("blob:", "https://res.cloudinary.com", "data:", 
+        "https://scontent.fltn4-1.fna.fbcdn.net", "https://scontent-ams4-1.xx.fbcdn.net"))
     .ScriptSources(s => s.Self().CustomSources("https://connect.facebook.net"))
 );
 
