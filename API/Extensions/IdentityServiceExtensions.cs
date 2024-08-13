@@ -28,7 +28,9 @@ public static class IdentityServiceExtensions
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = key,
                 ValidateIssuer = false,
-                ValidateAudience = false
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
             options.Events = new JwtBearerEvents
             {
