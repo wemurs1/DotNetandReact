@@ -16,13 +16,15 @@ public class AccountController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly TokenService _tokenService;
     private readonly IConfiguration _config;
+    private readonly SignInManager<AppUser> _signInManager;
     private readonly HttpClient _httpClient;
 
-    public AccountController(UserManager<AppUser> userManager, TokenService tokenService, IConfiguration config)
+    public AccountController(UserManager<AppUser> userManager, TokenService tokenService, IConfiguration config, SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
         _tokenService = tokenService;
         _config = config;
+        _signInManager = signInManager;
         _httpClient = new HttpClient
         {
             BaseAddress = new Uri("https://graph.facebook.com")
@@ -34,18 +36,22 @@ public class AccountController : ControllerBase
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await _userManager.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
-        if (user == null) return Unauthorized();
+        if (user == null) return Unauthorized("Invalid email");
 
-        var result = await _userManager.CheckPasswordAsync(user, loginDto.Password!);
+        if (user.UserName == "bob") user.EmailConfirmed = true; /* *********** Remove For Production *********** */
 
-        if (result)
+        if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password!, false);
+
+        if (result.Succeeded)
         {
             await SetRefreshToken(user);
 
             return CreateUserObject(user);
         }
 
-        return Unauthorized();
+        return Unauthorized("Invalid password");
     }
 
     [HttpPost("register")]
